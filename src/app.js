@@ -1,7 +1,7 @@
 
 import express from 'express';
 import { productsRouter } from './routes/users.products.js';
-// import { cartRouter } from './routes/users.cart.js';
+import { cartRouter } from './routes/users.cart.js';
 
 
 const app = express();
@@ -13,7 +13,7 @@ app.use(express.static("products"))
 
 
 app.use("/products",productsRouter);
-// app.use("/cart", cartRouter)
+app.use("/cart", cartRouter);
 
 app.get("*",(req,res) => {
     res.send("Welcome to my humble page.")

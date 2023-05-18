@@ -4,26 +4,8 @@ export default class ProductManager {
     constructor() {
         this.path = ('./src/data/Products.json')
         this.products = [];
-        this.loadProducts();
-    }
-loadProducts() {
-    try {
-    const data = fs.readFileSync(this.path, "utf-8");
-    if (data) {
-        this.products = JSON.parse(data);
-    }
-} catch (err) {
-    console.log(`Error: ${err.message}`);
-}
     }
 
-saveProducts() {
-    try {
-        fs.writeFileSync(this.path, JSON.stringify(this.products), "utf-8");
-    } catch (err) {
-        console.log(`Error: ${err.message}`);
-    }
-}
 
     addProduct(title, description, price, thumbnail, code, stock) {
         fs.promises.readFile(this.path, "UTF-8") 
@@ -41,10 +23,11 @@ saveProducts() {
             let productString = JSON.stringify(this.products);
             fs.writeFileSync(this.path, productString) 
         }
-        console.log();
+
         return this.getProducts();
 
     }
+
 
     async getProducts() {
     let data = await fs.promises.readFile(this.path, "UTF-8")
@@ -60,21 +43,21 @@ saveProducts() {
 async updateProduct(id, newtitle, newdescription, newprice, newthumbnail, newcode, newstock) {
     let data = fs.readFileSync(this.path, "UTF-8")
     let dataParse = JSON.parse(data)
-    let productFound = dataParse.findIndex(product => +product.id === +id);
-    if (productFound) {
-        dataParse[productFound] = {
-            id,
-            title: newtitle,
-            description: newdescription,
-            price: newprice,
-            thumbnail: newthumbnail,
-            code: newcode,
-            stock: newstock,
-        };
-        fs.writeFileSync(this.path, JSON.stringify(dataParse))
-    }
+    let productFound = dataParse.findIndex((product) =>+ product.id === +id)
 
-    console.log(productFound)
+    const update = {
+                id,
+                title: newtitle,
+                description: newdescription,
+                price: newprice,
+                thumbnail: newthumbnail,
+                code: newcode,
+                stock: newstock,
+            };
+            
+    this.products[productFound] = update
+    fs.writeFileSync(this.path, JSON.stringify(this.products))
+    
 }
 
 
@@ -94,15 +77,15 @@ deleteProduct(id) {
 }
 
 
-// const trial = new ProductManager();
+const trial = new ProductManager();
 
-// trial.addProduct('t-shirt', 'cosa', 836, 'imgen', '452342', '4');
-// trial.addProduct('pants', 'cosabuena', 333, 'imgen', '6753', '6');
-// trial.addProduct('ribbon', 'cosamala', 333, 'imgen', '5234', '2');
-// trial.addProduct('u', 'cosamasomenosbuena', 653, 'imgen', '86663342', '62');
-// trial.addProduct('hoyoverse', 'cosamasomenosmala', 11713, 'imgen', '11111', '3');
-// trial.addProduct("producto actualizado", "Este es un producto actualizado", 300, "Imagen actualizada", "abc123", '30',);
-// trial.addProduct('kk', 'cosamas', 63635, 'imgen', '32256', '3');
-// trial.addProduct('bss', 'coss', 645562, 'imgen', '2282', '3');
-// trial.addProduct('bts', 'cosamenos', 73425, 'imgen', '7362', '3');
+trial.addProduct('t-shirt', 'cosa', 836, 'imgen', '452342', '4');
+trial.addProduct('pants', 'cosabuena', 333, 'imgen', '6753', '6');
+trial.addProduct('ribbon', 'cosamala', 333, 'imgen', '5234', '2');
+trial.addProduct('u', 'cosamasomenosbuena', 653, 'imgen', '86663342', '62');
+trial.addProduct('hoyoverse', 'cosamasomenosmala', 11713, 'imgen', '11111', '3');
+trial.addProduct("producto actualizado", "Este es un producto actualizado", 300, "Imagen actualizada", "abc123", '30',);
+trial.addProduct('kk', 'cosamas', 63635, 'imgen', '32256', '3');
+trial.addProduct('bss', 'coss', 645562, 'imgen', '2282', '3');
+trial.addProduct('bts', 'cosamenos', 73425, 'imgen', '7362', '3');
 
