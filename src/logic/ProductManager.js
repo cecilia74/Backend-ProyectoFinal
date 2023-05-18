@@ -1,74 +1,96 @@
-import { channel } from 'diagnostics_channel';
 import fs from 'fs';
 
 export default class ProductManager {
     constructor() {
         this.path = ('./src/data/Products.json')
         this.products = [];
+        this.loadProducts();
+    }
+loadProducts() {
+    try {
+    const data = fs.readFileSync(this.path, "utf-8");
+    if (data) {
+        this.products = JSON.parse(data);
+    }
+} catch (err) {
+    console.log(`Error: ${err.message}`);
+}
     }
 
+saveProducts() {
+    try {
+        fs.writeFileSync(this.path, JSON.stringify(this.products), "utf-8");
+    } catch (err) {
+        console.log(`Error: ${err.message}`);
+    }
+}
+
     addProduct(title, description, price, thumbnail, code, stock) {
+        fs.promises.readFile(this.path, "UTF-8") 
 
         const newProducts = { title, description, price, thumbnail, code, stock }
 
         if (!title || !description || !price || !thumbnail || !code || !stock) {
             console.log("Product not added. Please complete again")
             return undefined
-        } else if (this.products.find((p) => +p.code === +code)) {
+        } else if (this.products.some((p) => p.code === code)) {
             console.log(`The code ${newProducts.code} has already been used. Please select another code`)
-            return undefined;
+            return undefined; 
         } else {
             this.products.push({ id: this.products.length ? this.products[this.products.length - 1].id + 1 : 1, ...newProducts });
             let productString = JSON.stringify(this.products);
-            fs.writeFileSync(this.path, productString)
+            fs.writeFileSync(this.path, productString) 
         }
         console.log();
         return this.getProducts();
 
     }
 
-
     async getProducts() {
-        let data = await fs.promises.readFile(this.path, "UTF-8")
-        return JSON.parse(data)
-    }
-
+    let data = await fs.promises.readFile(this.path, "UTF-8")
+    return JSON.parse(data)
+}
+    
 
     async getProductById(id) {
-        let data = await this.getProducts()
-        return data.find(product => +product.id == +id)
+    let data = await this.getProducts()
+    return data.find(product => +product.id == +id)
+}
+
+async updateProduct(id, newtitle, newdescription, newprice, newthumbnail, newcode, newstock) {
+    let data = fs.readFileSync(this.path, "UTF-8")
+    let dataParse = JSON.parse(data)
+    let productFound = dataParse.findIndex(product => +product.id === +id);
+    if (productFound) {
+        dataParse[productFound] = {
+            id,
+            title: newtitle,
+            description: newdescription,
+            price: newprice,
+            thumbnail: newthumbnail,
+            code: newcode,
+            stock: newstock,
+        };
+        fs.writeFileSync(this.path, JSON.stringify(dataParse))
     }
 
-    updateProduct(id, change) {
-        let data = fs.readFileSync(this.path, "UTF-8")
-        let dataParse = JSON.parse(data)
-        let productFound = dataParse.findIndex(product => +product.id === +id);
-        if (productFound) {
-            const update = {
-                id,
-                ...change,
-            };
-            dataParse[productFound] = update
-            fs.writeFileSync(this.path, JSON.stringify(dataParse))
-        }
-        return update
+    console.log(productFound)
+}
 
+
+deleteProduct(id) {
+    let data = fs.readFileSync(this.path, "UTF-8")
+    let dataParse = JSON.parse(data)
+    let findId = dataParse.findIndex((prod) => +prod.id === +id);
+    if (findId) {
+        dataParse.splice(findId, 1);
+        fs.writeFileSync(this.path, JSON.stringify(dataParse))
+        return `${id} was deleted`
+    } else {
+        console.log("Id doesn't exist");
+        return undefined;
     }
-
-
-    deleteProduct(id) {
-        let data = fs.readFileSync(this.path, "UTF-8")
-        let dataParse = JSON.parse(data)
-        let findId = dataParse.findIndex((prod) => +prod.id === +id);
-        if (findId) {
-            dataParse.splice(findId, 1);
-            fs.writeFileSync(this.path, JSON.stringify(dataParse))
-            return `${id} was deleted`
-        } else {
-            console.log("Id doesn't exist");
-            return undefined;
-        }
-    }
+}
 }
 
 

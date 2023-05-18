@@ -112,11 +112,16 @@ productsRouter.post("/", (req, res) => {
 });
 
 
-productsRouter.put("/:pid", (req, res) => {
+ productsRouter.put("/:pid", (req, res) => {
     try {
-        let di = req.params.pid;
-        let change = req.body;
-        let putid = newProductManager.updateProduct(di, change);
+        const di = req.params.pid;
+        const newtitle = req.body.title;
+        const newdes = req.body.description;
+        const newprice = req.body.price;
+        const prodthum = req.body.thumbnail;
+        const newcode = req.body.code;
+        const news = req.body.stock;
+        let putid = newProductManager.updateProduct(di, newtitle,newdes,newprice,prodthum,newcode,news);
         if (putid) {
             return res
                 .status(200)
