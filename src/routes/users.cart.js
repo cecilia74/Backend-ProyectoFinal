@@ -18,9 +18,9 @@ cartRouter.get("/", (req, res) => {
             })
         }
     } catch (err) {
-        res.status(400).send({
+        res.status(500).send({
             status: "ERROR",
-            msg: "Product not found",
+            msg: err.message,
             data: {},
         })
     }
@@ -40,9 +40,9 @@ cartRouter.get("/:cid", (req, res) => {
             })
         }
     } catch (err) {
-        res.status(400).send({
+        res.status(500).send({
             status: "ERROR",
-            msg: "Found all products",
+            msg: err.message,
             data: {},
         })
     }
@@ -90,9 +90,9 @@ cartRouter.post("/:cid/product/:pid", (req, res) => {
             data: postbody,
         })}
     } catch (err) {
-        res.status(400).send({
+        res.status(500).send({
             status: "ERROR",
-            msg: "Found all products",
+            msg: err.message,
             data: {},
         })
     }

@@ -1,6 +1,7 @@
 import fs from "fs";
 import ProductManager from "./ProductManager.js";
 
+const reqProductManager = new ProductManager();
 
 export default class CartManager {
     constructor() {
@@ -17,9 +18,10 @@ export default class CartManager {
                     ...cart,
                     products: cart.products || [],
                 }));
+                return 
             }
         } catch (err) {
-            console.log(`Error al leer el archivo del carrito: ${err.message}`);
+            console.log(`Cannot read file`);
         }
     }
 
@@ -27,14 +29,14 @@ export default class CartManager {
         try {
             fs.writeFileSync(this.path, JSON.stringify(this.carts), "utf-8");
         } catch (err) {
-            console.log(`Error al escribir el archivo del carrito: ${err.message}`);
+            console.log(`Cannot change file`);
         }
     }
 
 
     addcart() {
         const newCart = {
-            id: this.carts.length + 1,
+            id: this.carts.length ? this.carts[this.carts.length - 1].id + 1 : 1,
             products: [],
         };
 
@@ -57,7 +59,7 @@ async addProduct(cartId,prodId) {
     const foundId = this.carts.find((c)=> +c.id === +cartId);
     const moreprod = foundId.products.find((prod) => +prod.id === +id);
 
-    const manangerprod = this.getCartById(prodId);
+    const manangerprod = reqProductManager.getProductById(prodId);
     if (moreprod) {
         moreprod.quantity++;
 
@@ -73,10 +75,12 @@ async addProduct(cartId,prodId) {
     this.saveCarts();
 
 }
-
-
-
 }
+
+const trial2 = new CartManager();
+
+trial2.addcart()
+console.log(CartManager)
 //         { products: [ ] id:1 }
 // { producto: "iddelproducto", quantly: 1 }
 // [{products}]

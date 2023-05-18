@@ -29,25 +29,16 @@ productsRouter.get("/", async (req, res) => {
         }
     }
     catch (err) {
-        res.status(400).json({
+        res.status(500).send({
             status: "ERROR",
-            msg: "Not finished correctly",
+            msg: err.message,
             data: {},
-        });
+        })
     }
 
 })
-productsRouter.get("/cargar", (req, res) => {
 
-    const p =newProductManager.cargarproductos();
-    console.log(p);
-    res.status(200).send({
-        status: "SUCCESS",
-        msg: "Found all products",
-        data: p,
-    })
 
-})
 productsRouter.get("/:pid", async (req, res) => {
 
     try {
@@ -69,11 +60,11 @@ productsRouter.get("/:pid", async (req, res) => {
         }
 
     } catch (err) {
-        res.status(400).json({
+        res.status(500).send({
             status: "ERROR",
-            msg: "Not finished correctly",
+            msg: err.message,
             data: {},
-        });
+        })
     }
 });
 
@@ -103,9 +94,9 @@ productsRouter.post("/", (req, res) => {
             })
         }
     } catch (err) {
-        res.status(400).json({
+        res.status(500).send({
             status: "ERROR",
-            msg: "Product not added",
+            msg: err.message,
             data: {},
         })
     }
@@ -132,9 +123,9 @@ productsRouter.post("/", (req, res) => {
                 })
         }
     } catch (err) {
-        res.status(400).json({
+        res.status(500).send({
             status: "ERROR",
-            msg: "Product not found",
+            msg: err.message,
             data: {},
         })
     }
@@ -157,9 +148,9 @@ productsRouter.delete("/:pid", (req, res) => {
                 })
         }
     } catch (err) {
-        res.status(400).json({
+        res.status(500).send({
             status: "ERROR",
-            msg: "P.",
+            msg: err.message,
             data: {},
         })
     }

@@ -77,15 +77,15 @@ deleteProduct(id) {
 }
 
 
-const trial = new ProductManager();
+// const trial = new ProductManager();
 
-trial.addProduct('t-shirt', 'cosa', 836, 'imgen', '452342', '4');
-trial.addProduct('pants', 'cosabuena', 333, 'imgen', '6753', '6');
-trial.addProduct('ribbon', 'cosamala', 333, 'imgen', '5234', '2');
-trial.addProduct('u', 'cosamasomenosbuena', 653, 'imgen', '86663342', '62');
-trial.addProduct('hoyoverse', 'cosamasomenosmala', 11713, 'imgen', '11111', '3');
-trial.addProduct("producto actualizado", "Este es un producto actualizado", 300, "Imagen actualizada", "abc123", '30',);
-trial.addProduct('kk', 'cosamas', 63635, 'imgen', '32256', '3');
-trial.addProduct('bss', 'coss', 645562, 'imgen', '2282', '3');
-trial.addProduct('bts', 'cosamenos', 73425, 'imgen', '7362', '3');
+// trial.addProduct('t-shirt', 'cosa', 836, 'imgen', '452342', '4');
+// trial.addProduct('pants', 'cosabuena', 333, 'imgen', '6753', '6');
+// trial.addProduct('ribbon', 'cosamala', 333, 'imgen', '5234', '2');
+// trial.addProduct('u', 'cosamasomenosbuena', 653, 'imgen', '86663342', '62');
+// trial.addProduct('hoyoverse', 'cosamasomenosmala', 11713, 'imgen', '11111', '3');
+// trial.addProduct("producto actualizado", "Este es un producto actualizado", 300, "Imagen actualizada", "abc123", '30',);
+// trial.addProduct('kk', 'cosamas', 63635, 'imgen', '32256', '3');
+// trial.addProduct('bss', 'coss', 645562, 'imgen', '2282', '3');
+// trial.addProduct('bts', 'cosamenos', 73425, 'imgen', '7362', '3');
 
