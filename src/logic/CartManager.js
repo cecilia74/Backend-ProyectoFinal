@@ -18,32 +18,59 @@ export default class CartManager {
                     ...cart,
                     products: cart.products || [],
                 }));
-                return 
+                return
             }
         } catch (err) {
             console.log(`Cannot read file`);
         }
     }
 
-    saveCarts() {
+    async saveCarts() {
         try {
-            fs.writeFileSync(this.path, JSON.stringify(this.carts), "utf-8");
+            //             await fs.writeFile(this.path, JSON.stringify(this.carts), "utf-8");
+            // console.log(this.saveCarts)
+
+            await fs.writeFile(this.path, JSON.stringify(this.carts), (err) => {
+                if (err) throw err;
+                console.log('The file has been saved!');
+            });
+
         } catch (err) {
             console.log(`Cannot change file`);
+            console.log(err)
         }
     }
 
-
-    addcart() {
-        const newCart = {
-            id: this.carts.length ? this.carts[this.carts.length - 1].id + 1 : 1,
-            products: [],
-        };
-
-this.carts.push(newCart);
-this.saveCarts();
-return newCart;
+    async generateCartId() {
+        const carts = await this.getCart()
+        return carts.length !== 0 ? carts[carts.length - 1].id + 1 : 1;
     }
+
+    async addcart() {
+        const cartId = await this.generateCartId();
+        const newCart = { id: cartId, products: [] };
+        const carts = await this.getCart();
+        carts.push(newCart);
+        await this.saveCarts();
+        return newCart;
+    }
+
+
+
+    // async addcart(e) {
+
+    //     if (e) {
+
+
+    //     const newCart = {
+    //         id: this.carts.length ? this.carts[this.carts.length - 1].id + 1 : 1,
+    //         products: [],
+    //     };
+
+    //     this.carts.push(newCart);
+    //     this.saveCarts();
+    //     return newCart;}
+    // }
 
     getCart() {
         return this.carts;
@@ -55,31 +82,31 @@ return newCart;
         return data.find((product) => +product.id == +id)
     }
 
-async addProduct(cartId,prodId) {
-    const foundId = this.carts.find((c)=> +c.id === +cartId);
-    const moreprod = foundId.products.find((prod) => +prod.id === +id);
+    async addProduct(cartId, prodId) {
+        const foundId = this.carts.find((c) => +c.id === +cartId);
+        const moreprod = foundId.products.find((prod) => +prod.id === +id);
 
-    const manangerprod = reqProductManager.getProductById(prodId);
-    if (moreprod) {
-        moreprod.quantity++;
+        const manangerprod = reqProductManager.getProductById(prodId);
+        if (moreprod) {
+            moreprod.quantity++;
 
-    } else {
+        } else {
 
-        foundId.products.push({
-            manangerprod,
-            quantity: 1,
+            foundId.products.push({
+                manangerprod,
+                quantity: 1,
 
-        });
+            });
+        }
+
+        this.saveCarts();
+
     }
-
-    this.saveCarts();
-
-}
 }
 
 const trial2 = new CartManager();
 
-trial2.addcart()
+
 console.log(CartManager)
 //         { products: [ ] id:1 }
 // { producto: "iddelproducto", quantly: 1 }

@@ -12,8 +12,8 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static("products"))
 
 
-app.use("/products",productsRouter);
-app.use("/cart", cartRouter);
+app.use("/api/products",productsRouter);
+app.use("/api/cart", cartRouter);
 
 app.get("*",(req,res) => {
     res.send("Welcome to my humble page.")
