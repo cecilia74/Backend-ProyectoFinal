@@ -78,9 +78,9 @@ cartRouter.post("/:cid/product/:pid", (req, res) => {
         const postp = req.params.pid;
         const postbody = newCartManager.addProduct(postc, postp);
 
-        if (!cart) {
+        if (!postbody) {
             return res.status(404).json({ message: `Cart doesn't exist` });
-        } else if (!product) {
+        } else if (!postp) {
             return res.status(404).json({ message: `Product doesn't exist` });
         } else {
 

@@ -12,7 +12,7 @@ export default class ProductManager {
         const newProducts = { title, description, price, thumbnail, code, stock }
         const prods = await this.getProducts();
         if (!title || !description || !price || !thumbnail || !code || !stock) {
-            console.log("Product not added. Please complete again")
+            console.log("Product not added. Please complete again");
             return undefined
         } else if (prods.some((p) => p.code === code)) {
             console.log(`The code ${newProducts.code} has already been used. Please select another code`)
@@ -39,9 +39,8 @@ export default class ProductManager {
     }
 
     async updateProduct(id, newtitle, newdescription, newprice, newthumbnail, newcode, newstock) {
-        let data = fs.readFileSync(this.path, "UTF-8")
-        let dataParse = JSON.parse(data)
-        let productFound = dataParse.findIndex((product) => + product.id === +id)
+        const produ = await this.getProducts();
+        let productFound = produ.findIndex((product) => + product.id === +id)
 
         if (productFound === -1) {
             return null;
@@ -57,8 +56,8 @@ export default class ProductManager {
             stock: newstock,
         };
 
-        this.products[productFound] = update;
-        fs.writeFileSync(this.path, JSON.stringify(this.products));
+        produ[productFound] = update;
+        fs.writeFileSync(this.path, JSON.stringify(produ));
 
     }
 
