@@ -1,6 +1,6 @@
 
 import express from 'express';
-import ProductManager from '../logic/ProductManager.js';
+import ProductManager from '../DAO/functions/productManager.js';
 
 export const productsRouter = express.Router();
 
@@ -77,7 +77,9 @@ productsRouter.post("/", (req, res) => {
         const prodthum = req.body.thumbnail;
         const prodcode = req.body.code;
         const prods = req.body.stock;
-        const newprod = newProductManager.addProduct(prodtitle,proddes,prodprice,prodthum,prodcode,prods);
+        const prodcat = req.body.category;
+        const prodstat = req.body.status;
+        const newprod = newProductManager.addProduct(prodtitle,proddes,prodprice,prodthum,prodcode,prods,prodcat,prodstat);
         console.log(newprod);
         if (newprod) {
 
@@ -103,7 +105,7 @@ productsRouter.post("/", (req, res) => {
 });
 
 
- productsRouter.put("/:pid", (req, res) => {
+productsRouter.put("/:pid", (req, res) => {
     try {
         const di = req.params.pid;
         const newtitle = req.body.title;
@@ -112,7 +114,9 @@ productsRouter.post("/", (req, res) => {
         const prodthum = req.body.thumbnail;
         const newcode = req.body.code;
         const news = req.body.stock;
-        let putid = newProductManager.updateProduct(di, newtitle,newdes,newprice,prodthum,newcode,news);
+        const newcat = req.body.category;
+        const newstat = req.body.status;
+        let putid = newProductManager.updateProduct(di, newtitle,newdes,newprice,prodthum,newcode,news,newcat,newstat);
         if (putid) {
             return res
                 .status(200)
