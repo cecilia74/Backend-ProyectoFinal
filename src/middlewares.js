@@ -1,3 +1,5 @@
-import express from "express";
-import { productsRouter } from "./routes/users.products";
+import { UserModel } from "./DAO/models/users.model";
 
+UserModel.prependListener("find",function () {
+    this.populate("")
+})

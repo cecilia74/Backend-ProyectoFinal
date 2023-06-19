@@ -3,11 +3,11 @@ import handlebars from "express-handlebars";
 import path from "path";
 import { _dirname } from './config.js';
 import ProductManager from './DAO/functions/productManager.js';
-import { chatRouter } from './routes/chat.router.js';
-import { home } from './routes/home.router.js';
-import { realtime } from "./routes/realtimeproducts.router.js";
-import { productsRouter } from './routes/users.products.js';
-import { usersRouter } from './routes/users.router.js';
+import { chatRouter } from './routes/chat.routes.js';
+import { home } from './routes/home.routes.js';
+import { realtime } from "./routes/realtimeproducts.routes.js";
+import { productsRouter } from './routes/users.products.routes.js';
+import { usersRouter } from './routes/users.routes.js';
 import { connectSocketServer } from "./utils/socketServer.js";
 import { connectMongo } from './utils/dbConnecton.js';
 
