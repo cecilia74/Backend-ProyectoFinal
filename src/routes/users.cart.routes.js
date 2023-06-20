@@ -1,5 +1,5 @@
 import express from 'express';
-import CartManager from '../logic/CartManager.js';
+import CartManager from '../DAO/functions/CartManager.js';
 
 export const cartRouter = express.Router();
 
