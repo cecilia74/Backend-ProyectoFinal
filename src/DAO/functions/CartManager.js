@@ -39,13 +39,19 @@ export default class CartManager {
     }
 
     async addcart() {
-
+try {
         const newCart = {
             id: this.carts.length ? this.carts[this.carts.length - 1].id + 1 : 1,
             products: [],
         };
         this.carts.push(newCart);
         await this.saveCarts();
+        return newCart;
+} catch (err) {
+    console.log(`Cannot create cart`);
+    console.log(err)
+}
+
     }
 
     getCart() {
@@ -60,7 +66,7 @@ export default class CartManager {
 
     async addProduct(cartId, prodId) {
         const foundId = this.carts.find((c) => +c.id === +cartId);
-        const moreprod = foundId.products.find((prod) => +prod.id === +id);
+        const moreprod = foundId.products.find((prod) => +prod.id === +prodId);
 
         const manangerprod = reqProductManager.getProductById(prodId);
         if (moreprod) {
@@ -76,14 +82,21 @@ export default class CartManager {
         }
 
         this.saveCarts();
-
+console.log("Product added to cart")
     }
+
+    async getProductById(id) {
+        const product = await reqProductManager.getProductById(id);
+        console.log(product);
+        return product;
+      }
+    
 }
 
-const trial2 = new CartManager();
+// const trial2 = new CartManager();
 
 // trial2.addcart();
-console.log(CartManager)
+// console.log(CartManager)
 //         { products: [ ] id:1 }
 // { producto: "iddelproducto", quantly: 1 }
 // [{products}]

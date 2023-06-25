@@ -14,4 +14,4 @@ export const ProductsModel = model(
   })
 );
 
-ProductsModel.plugin(mongoosePaginate);
+// ProductsModel.plugin(mongoosePaginate);

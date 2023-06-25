@@ -6,7 +6,7 @@ import ProductManager from './DAO/functions/ProductManager.js';
 import { chatRouter } from './routes/chat.routes.js';
 import { home } from './routes/home.routes.js';
 import { realtime } from "./routes/realtimeproducts.routes.js";
-import { productsRouter } from './routes/users.products.routes.js';
+import { productsRouter } from './routes/products.routes.js';
 import { usersRouter } from './routes/users.routes.js';
 import { connectSocketServer } from "./utils/socketServer.js";
 import { connectMongo } from './utils/dbConnecton.js';

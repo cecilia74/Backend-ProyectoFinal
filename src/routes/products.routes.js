@@ -1,7 +1,7 @@
 
 import express from 'express';
 import ProductManager from '../DAO/functions/ProductManager.js';
-
+import { ProductServise } from '../services/products.service.js';
 export const productsRouter = express.Router();
 
 const newProductManager = new ProductManager('../data/Products.json');
@@ -10,17 +10,8 @@ const newProductManager = new ProductManager('../data/Products.json');
 productsRouter.get("/", async (req, res) => {
 
     try {
-        const { limit } = req.query;
-        const products = await newProductManager.getProducts();
-        if (limit) {
-            const limitprod = products.slice(0, parseInt(limit))
-            res.status(200).send({
-                status: "SUCCESS",
-                msg: "Found requested products",
-                data: limitprod,
-            });
-
-        } else {
+        const products = await ProductServise.getAll();
+        if (products) {
             res.status(200).send({
                 status: "SUCCESS",
                 msg: "Found all products",
@@ -43,7 +34,7 @@ productsRouter.get("/:pid", async (req, res) => {
 
     try {
         let idid = req.params.pid;
-        let idEncontrado = await newProductManager.getProductById(idid);
+        let idEncontrado = await ProductServise.getOne(idid);
         if (idEncontrado) {
             res.status(200).send({
                 status: "SUCCESS",
@@ -68,18 +59,21 @@ productsRouter.get("/:pid", async (req, res) => {
     }
 });
 
-productsRouter.post("/", (req, res) => {
+productsRouter.post("/", async (req, res) => {
     try {
 
-        const prodtitle = req.body.title;
-        const proddes = req.body.description;
-        const prodprice = req.body.price;
-        const prodthum = req.body.thumbnail;
-        const prodcode = req.body.code;
-        const prods = req.body.stock;
-        const prodcat = req.body.category;
-        const prodstat = req.body.status;
-        const newprod = newProductManager.addProduct(prodtitle,proddes,prodprice,prodthum,prodcode,prods,prodcat,prodstat);
+        // const prodtitle = req.body.title;
+        // const proddes = req.body.description;
+        // const prodprice = req.body.price;
+        // const prodthum = req.body.thumbnail;
+        // const prodcode = req.body.code;
+        // const prods = req.body.stock;
+        // const prodcat = req.body.category;
+        // const prodstat = req.body.status;
+
+        // const all = {prodtitle,proddes,prodprice,prodthum,prodcode,prods,prodcat,prodstat};
+        const body = req.body
+        const newprod = ProductServise.createOne(body);
         console.log(newprod);
         if (newprod) {
 
@@ -107,16 +101,19 @@ productsRouter.post("/", (req, res) => {
 
 productsRouter.put("/:pid", (req, res) => {
     try {
-        const di = req.params.pid;
-        const newtitle = req.body.title;
-        const newdes = req.body.description;
-        const newprice = req.body.price;
-        const prodthum = req.body.thumbnail;
-        const newcode = req.body.code;
-        const news = req.body.stock;
-        const newcat = req.body.category;
-        const newstat = req.body.status;
-        let putid = newProductManager.updateProduct(di, newtitle,newdes,newprice,prodthum,newcode,news,newcat,newstat);
+        // const di = req.params.pid;
+        // const newtitle = req.body.title;
+        // const newdes = req.body.description;
+        // const newprice = req.body.price;
+        // const prodthum = req.body.thumbnail;
+        // const newcode = req.body.code;
+        // const news = req.body.stock;
+        // const newcat = req.body.category;
+        // const newstat = req.body.status;
+        // const newall = { newtitle,newdes,newprice,prodthum,newcode,news,newcat,newstat}
+        const {pid} = req.params;
+        const body = req.body;
+        let putid = ProductServise.updateOne(pid,body);
         if (putid) {
             return res
                 .status(200)
@@ -140,7 +137,7 @@ productsRouter.delete("/:pid", (req, res) => {
 
     try {
         let id = req.params.pid;
-        let deleid = newProductManager.deleteProduct(id);
+        let deleid = ProductServise.deleteOne(id);
 
         if (deleid) {
             return res
