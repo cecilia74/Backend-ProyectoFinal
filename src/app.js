@@ -1,19 +1,19 @@
 import express from 'express';
 import handlebars from "express-handlebars";
 import path from "path";
-import { _dirname } from './config.js';
 import ProductManager from './DAO/functions/ProductManager.js';
+import { _dirname } from './config.js';
+import { cartRouter } from './routes/carts.routes.js';
 import { chatRouter } from './routes/chat.routes.js';
 import { home } from './routes/home.routes.js';
-import { realtime } from "./routes/realtimeproducts.routes.js";
 import { productsRouter } from './routes/products.routes.js';
+import { realtime } from "./routes/realtimeproducts.routes.js";
 import { usersRouter } from './routes/users.routes.js';
-import { connectSocketServer } from "./utils/socketServer.js";
+import { viewsRouter } from './routes/viewsProducts.routes.js';
 import { connectMongo } from './utils/dbConnecton.js';
+import { connectSocketServer } from "./utils/socketServer.js";
 
 
-
-const appManager = new ProductManager();
 const app = express();
 const PORT = 8080;
 
@@ -27,11 +27,13 @@ app.use(express.static("public"));
 
 app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
+app.use("/api/carts", cartRouter)
 
 
 // DEVOLVER HTML
 
-app.use("/home", home)
+app.use("/", home);
+app.use("/", viewsRouter);
 
 app.use("/realtimeproducts", realtime)
 
