@@ -1,6 +1,5 @@
 import fs from "fs";
-import ProductManager from '../DAO/functions/productManager.js';
-
+import ProductManager from "./ProductManager.js";
 const reqProductManager = new ProductManager();
 
 export default class CartManager {

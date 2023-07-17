@@ -9,9 +9,9 @@ import { home } from './routes/home.routes.js';
 import { productsRouter } from './routes/products.routes.js';
 import { realtime } from "./routes/realtimeproducts.routes.js";
 import { usersRouter } from './routes/users.routes.js';
-import { viewsRouter } from './routes/viewsProducts.routes.js';
 import { connectMongo } from './utils/dbConnecton.js';
 import { connectSocketServer } from "./utils/socketServer.js";
+
 
 
 const app = express();
@@ -33,7 +33,6 @@ app.use("/api/carts", cartRouter)
 // DEVOLVER HTML
 
 app.use("/", home);
-app.use("/", viewsRouter);
 
 app.use("/realtimeproducts", realtime)
 
@@ -42,7 +41,7 @@ app.use("/realtimeproducts", realtime)
 app.use("/chat", chatRouter)
 
 app.get("*", (req, res) => {
-    res.send("Welcome to my humble page.")
+    res.send(console.log(`Welcome to my humble page.`))
 })
 
 
