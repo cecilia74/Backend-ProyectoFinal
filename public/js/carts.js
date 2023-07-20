@@ -1,7 +1,7 @@
 
 function postToCart(_id) {
     const PORT = 8080;
-    let cartId = localStorage.getItem("3").toString();
+    let cartId = localStorage.getItem("3");
     let cId = cartId ? cartId._id : null;
     const API_URL1 = `http://localhost:${PORT}/api`;
     const url = `${API_URL1}/carts/${cId}/product/${_id}`;

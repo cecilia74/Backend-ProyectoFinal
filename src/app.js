@@ -1,7 +1,6 @@
 import express from 'express';
 import handlebars from "express-handlebars";
 import path from "path";
-import ProductManager from './DAO/functions/ProductManager.js';
 import { _dirname } from './config.js';
 import { cartRouter } from './routes/carts.routes.js';
 import { chatRouter } from './routes/chat.routes.js';
@@ -11,7 +10,8 @@ import { realtime } from "./routes/realtimeproducts.routes.js";
 import { usersRouter } from './routes/users.routes.js';
 import { connectMongo } from './utils/dbConnecton.js';
 import { connectSocketServer } from "./utils/socketServer.js";
-
+import session from 'express-session';
+import { sessionsRouter } from './routes/sessions.routes.js';
 
 
 const app = express();
@@ -23,12 +23,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static("public"));
+app.use(session({ secret: 'un-re-secreto', resave: true, saveUninitialized: true }));
 
 
 app.use("/api/products", productsRouter);
 app.use("/api/users", usersRouter);
-app.use("/api/carts", cartRouter)
-
+app.use("/api/carts", cartRouter);
+app.use("/session",sessionsRouter);
 
 // DEVOLVER HTML
 
