@@ -1,89 +1,96 @@
 import { Server } from 'socket.io';
-import { MsgModel } from "../DAO/models/msgs.model.js"
-import { ProductsModel } from '../DAO/models/products.model.js';
-import ProductManager from '../DAO/functions/ProductManager.js';
-import { ProductServise } from '../services/products.service.js';
+import { MsgModel } from '../DAO/mongo/msgs.model.js';
+import { productService } from '../services/product.service.js';
+
 export function connectSocketServer(httpServer) {
+  // CONFIG DE SOCKET.IO
+  const socketServer = new Server(httpServer);
 
-    const socketserver = new Server(httpServer);
+  function validateProductFields(newProd) {
+    const requiredFields = ['title', 'description', 'category', 'price', 'code', 'stock'];
+    const typeChecks = {
+      title: 'string',
+      description: 'string',
+      category: 'string',
+      price: 'number',
+      code: 'string',
+      stock: 'number',
+    };
 
-    // PRODUCTS
-    socketserver.on("connection", async (socket) => {
-        console.log(`New clinet: ${socket.id}`);
+    for (const field of requiredFields) {
+      if (!newProd[field]) {
+        console.log(`El campo '${field}' es obligatorio`);
+        return false;
+      }
 
-        try {
-            const allProducts = await ProductsModel.find({});
-            socket.emit("products", allProducts);
-        } catch (e) {
-            console.log(e);
+      if (typeof newProd[field] !== typeChecks[field]) {
+        console.log(`El campo '${field}' debe ser de tipo '${typeChecks[field]}'`);
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  socketServer.on('connection', async socket => {
+    console.log(`New client: ${socket.id}`);
+
+    socket.on('new-product', async newProd => {
+      try {
+        if (!validateProductFields(newProd)) {
+          return;
         }
-        socket.on("new-product", async newProd => {
-            try {
-                if (
-                    !newProd.title ||
-                    !newProd.description ||
-                    !newProd.category ||
-                    !newProd.price ||
-                    !newProd.code ||
-                    !newProd.stock
-                ) {
-                    console.log('Please complete all forms');
-                    return;
-                }
-                const productsList = await ProductsModel.find({});
-                console.log(productsList);
-                socketserver.emit("products", productsList);
-            } catch (err) {
-                console.log(err);
-            }
-        });
 
-        socket.on("delete-product", async (productId) => {
-            try {
-                ProductsModel.deleteOne({_id:productId});
+        // Validar que no se repita el código
+        const currentProducts = await productService.getAllProducts();
+        const codeAlreadyExists = currentProducts.some(prod => prod.code === newProd.code);
 
-                const productsList = await ProductsModel.find({});
-                console.log(productsList);
-                socketserver.emit("products", productsList);
-            } catch (err) {
-                console.log(err);
-            }
-        });
-            // CARTS
-        socket.on('addToCart', async (entries) => {
-            const product = await ProductServise.createOne(entries);
-            socketserver.emit('addedProduct', product)
-            })
-        socket.on("productModified", async (id, newProd) => {
-            try {
-                console.log(id);
-                console.log(newProd);
-                await ProductsModel.findOneAndUpdate({ _id: id }, newProd);
-                const prod = await ProductsModel.find({});
-                socketserver.emit("products", prod);
-            } catch (e) {
-                console.log(e);
-            }
-        });
-        socket.on("msg_front_to_back", async (msg) => {
-            try {
-                await MsgModel.create(msg);
-            } catch (err) {
-                console.log(err)
-            }
+        if (codeAlreadyExists) {
+          console.log(`Ya existe un producto con el código ${newProd.code}`);
+          return;
+        }
 
-            try {
-                const msgs = await MsgModel.find({})
-                socketserver.emit("listado_de_msgs", msgs)
-            } catch (err) {
-                console.log(err)
-            }
+        // Validar y establecer el valor por defecto para el campo status
+        const status = typeof newProd.status === 'boolean' ? newProd.status : true;
 
+        // Agregar el producto al arreglo con un id autoincrementable
+        const newProduct = {
+          ...newProd,
+          status,
+        };
+        await productService.createProduct(newProduct);
 
-        });
-
-
-
-
+        const productsList = await productService.getAllProducts();
+        socketServer.emit('products', productsList);
+      } catch (err) {
+        console.log(err);
+      }
     });
+
+    socket.on('delete-product', async productId => {
+      try {
+        await productService.deleteProduct(productId);
+
+        const productsList = await productService.getAllProducts();
+        socketServer.emit('products', productsList);
+      } catch (err) {
+        console.log(err);
+      }
+    });
+
+    socket.on('msg_front_to_back', async msg => {
+      try {
+        await MsgModel.create(msg);
+      } catch (e) {
+        console.log(e);
+      }
+
+      try {
+        const msgs = await MsgModel.find({}).exec();
+        socketServer.emit('listado_de_msgs', msgs);
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  });
 }

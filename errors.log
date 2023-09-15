@@ -1,0 +1,14 @@
+2023-09-04T00:17:51.024Z error: userService.registerUser is not a function
+2023-09-04T00:19:02.016Z error: userService.registerUser is not a function
+2023-09-04T00:53:24.172Z error: userService.registerUser is not a function
+2023-09-04T01:01:38.616Z error: Error in register
+2023-09-04T23:10:29.374Z error: userService.registerUser is not a function
+2023-09-04T23:14:58.911Z error: usersModel.createUser is not a function
+2023-09-05T04:31:22.101Z error: Error al crear el usuario
+2023-09-05T19:49:16.851Z error: Error al crear el usuario
+2023-09-05T19:51:30.658Z error: Error al crear el usuario
+2023-09-05T20:55:47.348Z error: Error al crear el usuario
+2023-09-05T22:39:23.646Z error: Error al crear el usuario
+2023-09-05T22:48:04.593Z error: Cannot destructure property 'firstName' of 'req.body' as it is undefined.
+2023-09-05T22:54:46.778Z error: Cannot destructure property 'firstName' of 'req.body' as it is undefined.
+2023-09-05T23:32:55.393Z error: Error in register

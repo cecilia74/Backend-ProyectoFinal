@@ -1,0 +1,28 @@
+<div class='form-login'>
+  <div
+    class='form-container'
+  >
+    <h2>Login</h2>
+    <form action='/login' method='POST'>
+      <div class='form-group'>
+        <i class='fas fa-envelope'></i>
+        <input id='email' name='email' type='text' placeholder='email' />
+      </div>
+      <div class='form-group'>
+        <i class='fas fa-lock'></i>
+        <input id='password' name='password' type='password' placeholder='password' />
+      </div>
+      <input type='submit' class='btn btn-primary' value='Login' />
+      <a href='/api/sessions/github' class='github-button'>
+        <img
+          src='https://cdn.pixabay.com/photo/2022/01/30/13/33/github-6980894_1280.png'
+          alt='GitHub Logo'
+          class='github-logo'
+        />
+        Iniciar sesión con GitHub</a>
+      <div class='register-button'>
+        <a href='/register' class='btn btn-danger'>Registrarse</a>
+      </div>
+    </form>
+  </div>
+</div>

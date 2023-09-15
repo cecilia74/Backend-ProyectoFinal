@@ -1,41 +1,24 @@
-import { UserModel } from "../DAO/models/users.model.js";
+import importModels from "../DAO/factory.js";
 
-class userService {
+const models = await importModels();
 
-    async getAll() {
-        const users = await UserModel.find(
-            {},
-            {
-                _id: true,
-                firstName: true,
-                lastName: true,
-                email: true,
-            },);
-        return users;
+const usersModel = models.users;
+
+class UserService {
+    async getUser(username) {
+        const user = await usersModel.getUser(username)
+        return user;
     }
 
-    async create() {
-        const userCreated = await UserModel.create({
-            firstName,
-            lastName,
-            email
-        });
-        return userCreated;
+    async createUser(newUser) {
+        const user = await usersModel.createUser(newUser);
+        return user;
     }
 
-    async update() {
-        const userUptaded = await UserModel.updateOne(
-            { _id: _id },
-            { firstName, lastName, email }
-        );
-        return userUptaded;
+    async getUserById(id) {
+        const user = await usersModel.getUserById(id);
+        return user;
     }
-
-    async deleteOne(_id) {
-        const result = await UserModel.deleteOne(_id);
-        return result;
-    }
-
 }
 
-export const UserService = new userService();
+export const userService = new UserService();

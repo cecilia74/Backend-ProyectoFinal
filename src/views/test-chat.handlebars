@@ -38,6 +38,7 @@
             aria-expanded='false'
           >
             <i class='fas fa-user'></i>
+            <!-- Icono de perfil -->
           </a>
           <ul class='dropdown-menu dropdown-menu-end' aria-labelledby='profileDropdown'>
             <li>
@@ -72,48 +73,40 @@
   </div>
 </header>
 
-<div class='container'>
-  <div class='row'>
-    <div class='col-md-8'>
-      <h2>Carrito de Compra</h2>
-      <div class='row'>
-        {{#each plainCart}}
-          <div class='col-md-12'>
-            <div class='card mb-3'>
-              <div class='row g-0'>
-                <div class='col-md-4'>
-                  <img class='card-img-top' src={{product.thumbnails}} alt='producto' />
-                </div>
-                <div class='col-md-8'>
-                  <div class='card-body'>
-                    <h5 class='card-title'>{{product.title}}</h5>
-                    <p class='card-text'>{{product.description}}</p>
-                    <p class='card-text'><strong>ID:</strong> {{product._id}}</p>
-                    <p class='card-text'><strong>Código:</strong> {{product.code}}</p>
-                    <p class='card-text'><strong>Precio:</strong> ${{product.price}}</p>
-                    <p class='card-text'><strong>Cantidad:</strong> {{quantity}}</p>
-                    <button class='btn btn-danger deleteFromCart' data-productid='{{product._id}}'>
-                      Eliminar del carrito
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+<div class='chat-body'>
+  <div class='container'>
+    <div class='chat-header'> 
+      <h3>CHAT DE LA TIENDA</h3>
+    </div>
+    <hr class='green-line' />
+
+    <div class='chat-messages'>
+      <p>Listado de mensajes:</p>
+      <div id='div-msgs' class='message-container'>
+        <div class='text-center'>
+          <div class='spinner-grow text-success' role='status'>
+            <span class='visually-hidden'>Loading...</span>
           </div>
-        {{/each}}
+        </div>
       </div>
     </div>
-    <div class='col-md-4'>
-      <h2>Opciones del Carrito</h2>
-      <div>
-        {{#each cartId}}
-          <button class='btn btn-danger deleteCart' data-cartid='{{this}}'>Eliminar carrito
-            {{this}}</button>
-        {{/each}}
+
+    <hr class='green-line' />
+
+    <div class='chat-input'>
+      <div class='input-group'>
+        <input
+          id='input-msg'
+          type='text'
+          class='form-control'
+          placeholder='Ingrese su mensaje...'
+        />
+        <button id='send-btn' class='btn btn-success' disabled>Enviar</button>
       </div>
     </div>
   </div>
 </div>
 
-<script type='module' src='/js/cart.js'></script>
+<script src='/socket.io/socket.io.js'></script>
 <script src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+<script src='/js/test-chat.js'></script>
